@@ -6,7 +6,7 @@ const ExpressError = require('../expressError');
 
 // Routes
 // GET /companies
-router.get('/companies', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
 // use try/catch to handle errors
   try {
     // use db.query to get all companies
@@ -19,7 +19,7 @@ router.get('/companies', async (req, res, next) => {
 });
 
 // GET /companies/:code
-router.get('/companies/:code', async (req, res, next) => {
+router.get('/:code', async (req, res, next) => {
   try {
     // use db.query to get a single company by code
     const { code } = req.params;
@@ -40,23 +40,27 @@ router.get('/companies/:code', async (req, res, next) => {
 });
 
 // POST /companies
-router.post('/companies', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     // use db.query to create a new company
+    // console.log(req.body);
     const { code, name, description } = req.body;
+
     const results = await db.query(
       `INSERT INTO companies (code, name, description) VALUES ($1, $2, $3) RETURNING code, name, description`,
       [code, name, description]
     );
     // return the new company as JSON
+    // console.log({ company: results.rows[0] });
     return res.status(201).json({ company: results.rows[0] });
   } catch (e) {
+    // console.log(e);
     return next(e);
   }
 });
 
 // PUT /companies/:code
-router.put('/companies/:code', async (req, res, next) => {
+router.put('/:code', async (req, res, next) => {
   try {
     // use db.query to update a company
     const { code } = req.params;
@@ -77,7 +81,7 @@ router.put('/companies/:code', async (req, res, next) => {
 });
 
 // DELETE /companies/:code
-router.delete('/companies/:code', async (req, res, next) => {
+router.delete('/:code', async (req, res, next) => {
   try {
     // use db.query to delete a company
     const { code } = req.params;
