@@ -2,7 +2,8 @@
 const express = require('express');
 const router = new express.Router();
 const db = require('../db');
-const ExpressError = require('../expressError');    
+const ExpressError = require('../expressError');
+const slugify = require('slugify');    
 
 // Routes
 // GET /companies
@@ -46,9 +47,17 @@ router.post('/', async (req, res, next) => {
     // console.log(req.body);
     const { code, name, description } = req.body;
 
+    // create a slug for the company code
+    // they should have no spaces or weird punctuation, and should be all lower-case
+    const slug = slugify(code, { 
+      lower: true,
+      remove: /[$*_+~.()'"!\-:@\s]/g,
+      trim: true});
+    console.log(slug);
+    // use db.query to create a new company
     const results = await db.query(
       `INSERT INTO companies (code, name, description) VALUES ($1, $2, $3) RETURNING code, name, description`,
-      [code, name, description]
+      [slug, name, description]
     );
     // return the new company as JSON
     // console.log({ company: results.rows[0] });

@@ -79,6 +79,16 @@ describe('POST /companies', () => {
     expect(res.statusCode).toBe(201);
     expect(res.body).toEqual({ company: { code: 'new', name: 'New Company', description: 'This is a new company' } });
   });
+
+  test('Garuntee that the company code is slugified', async () => {
+    // Send POST request to /companies
+    const res = await request(app)
+      .post('/companies')
+      .send({ code: 'New Company', name: 'New Company', description: 'This is a new company' });
+    // Check the response is successful with the expected data
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({ company: { code: 'newcompany', name: 'New Company', description: 'This is a new company' } });
+  });
 });
 
 // Test PUT /companies/:code

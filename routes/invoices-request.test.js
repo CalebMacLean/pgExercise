@@ -57,7 +57,7 @@ describe('GET /invoices', () => {
 describe('GET /invoices/:id', () => {
   test('Get a single invoice', async () => {
     const response = await request(app).get('/invoices/1');
-    console.log('response from GET /invoices/:id', response);
+    // console.log('response from GET /invoices/:id', response);
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
       invoice: {

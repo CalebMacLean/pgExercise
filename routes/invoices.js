@@ -29,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
       [id]
     );
     const invoice = invoiceResults.rows[0];
-    console.log("invoice",invoice);
+    // console.log("invoice",invoice);
     // if the invoice is not found, throw a 404 error
     if (invoiceResults.rows.length === 0) {
       throw new ExpressError(`No such invoice: ${id}`, 404);
