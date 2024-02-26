@@ -6,7 +6,7 @@ const ExpressError = require('../expressError');
 
 // Routes
 // GET /invoices
-router.get('/invoices', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
 // use try/catch to handle errors
   try {
     // use db.query to get all invoices
@@ -20,7 +20,7 @@ router.get('/invoices', async (req, res, next) => {
 });
 
 // GET /invoices/:id
-router.get('/invoices/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     // use req.params to get the id
     const { id } = req.params;
@@ -28,12 +28,13 @@ router.get('/invoices/:id', async (req, res, next) => {
       `SELECT * FROM invoices WHERE id = $1`,
       [id]
     );
+    const invoice = invoiceResults.rows[0];
+    console.log("invoice",invoice);
     // if the invoice is not found, throw a 404 error
     if (invoiceResults.rows.length === 0) {
       throw new ExpressError(`No such invoice: ${id}`, 404);
     }
     // return the invoice as JSON
-    const invoice = invoiceResults.rows[0];
     return res.json({ invoice });
 
   } catch (e) {
@@ -42,7 +43,7 @@ router.get('/invoices/:id', async (req, res, next) => {
 });
 
 // POST /invoices
-router.post('/invoices', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     // use req.body to get the required data
     const { comp_code, amt } = req.body;
@@ -59,7 +60,7 @@ router.post('/invoices', async (req, res, next) => {
 });
 
 // PUT /invoices/:id
-router.put('/invoices/:id', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     // use req.params to get the id and req.body to get the required data
     const { id } = req.params;
@@ -81,7 +82,7 @@ router.put('/invoices/:id', async (req, res, next) => {
 });
 
 // DELETE /invoices/:id
-router.delete('/invoices/:id', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     // use req.params to get the id
     const { id } = req.params;
